@@ -6,9 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppCitas.Service.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class UsersController : ControllerBase
+public class UsersController : BaseApiController
 {
     private readonly DataContext _context;
 
@@ -29,5 +27,11 @@ public class UsersController : ControllerBase
     public async Task <ActionResult<AppUser>> GetUserById(int id)
     {
         return await _context.Users.FindAsync(id);
+    }
+
+    [HttpPost]
+    public async Task <ActionResult<AppUser>> CreateUser()
+    {
+        return null;
     }
 }
