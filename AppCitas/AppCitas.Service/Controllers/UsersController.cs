@@ -29,9 +29,4 @@ public class UsersController : BaseApiController
         return await _context.Users.FindAsync(id);
     }
 
-    [HttpPost]
-    public async Task <ActionResult<AppUser>> CreateUser()
-    {
-        return null;
-    }
 }
