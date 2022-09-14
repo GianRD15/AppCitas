@@ -20,7 +20,7 @@ public class AccountController : BaseApiController
     [HttpPost("register")]
     public async Task<ActionResult<AppUser>> Register(RegisterDTO registerDto)
     {
-        if( await userExist(registerDto.Username))
+        if (await userExist(registerDto.Username))
         {
             return BadRequest(new { message = "Username is already taken" });
         }
@@ -41,16 +41,16 @@ public class AccountController : BaseApiController
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult <AppUser>> login(LoginDTo loginDto)
+    public async Task<ActionResult<AppUser>> login(LoginDTo loginDto)
     {
         var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.Username);
 
         if (user == null) return Unauthorized(new { message = "Invalid user or password" });
-        
+
         using var hmac = new HMACSHA512(user.PasswordSalt);
         var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
-        for(int i=0; i<computedHash.Length; i++)
+        for (int i = 0; i < computedHash.Length; i++)
         {
             if (computedHash[i] != user.PasswordHash[i]) return Unauthorized(new { message = "Invalid user or password" });
         }
