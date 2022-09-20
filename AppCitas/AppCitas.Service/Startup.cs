@@ -3,6 +3,9 @@ using Microsoft.OpenApi.Models;
 using AppCitas.Service.Data;
 using AppCitas.Service.Interfaces;
 using AppCitas.Service.Services;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 namespace AppCitas;
 
@@ -28,7 +31,15 @@ public class Startup
         });
         services.AddControllers();
         services.AddCors();
-
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -50,6 +61,8 @@ public class Startup
         app.UseRouting();
 
         app.UseCors(p => p.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 
