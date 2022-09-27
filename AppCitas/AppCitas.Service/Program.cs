@@ -22,6 +22,8 @@ public class Program
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error ocurred during migration/seeding");
         }
+
+        await host.RunAsync();
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
