@@ -1,5 +1,8 @@
 ﻿using AppCitas.Service.Entities;
+using AppCitas.Service.Entities.DOTs;
 using AppCitas.Service.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppCitas.Service.Data;
@@ -7,10 +10,26 @@ namespace AppCitas.Service.Data;
 public class UserRepository : IUserRepository
 {
     private readonly DataContext _context;
-    public UserRepository(DataContext contex)
+    private readonly IMapper _mapper;
+    public UserRepository(DataContext contex, IMapper mapper)
     {
         _context = contex;
+        _mapper = mapper;
     }
+
+    public async Task<MemberDTO> GetMemberAsync(string username)
+    {
+        return await _context.Users
+            .Where(x => x.UserName == username)
+            .ProjectTo<MemberDTO>(_mapper.ConfigurationProvider)
+            .SingleOrDefaultAsync();
+    }
+
+    public Task<IEnumerable<MemberDTO>> GetMembersAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<AppUser>> GetUserAsync()
     {
         return await _context.Users

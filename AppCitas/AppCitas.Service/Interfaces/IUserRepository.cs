@@ -1,4 +1,5 @@
 ﻿using AppCitas.Service.Entities;
+using AppCitas.Service.Entities.DOTs;
 
 namespace AppCitas.Service.Interfaces;
 
@@ -9,4 +10,7 @@ public interface IUserRepository
     Task<AppUser> GetUserByUsernameAsync(string username);
     Task<bool> SaveAllAsync();
     void Update(AppUser user);
+
+    Task<IEnumerable<MemberDTO>> GetMembersAsync();
+    Task<MemberDTO> GetMemberAsync(string username);
 }

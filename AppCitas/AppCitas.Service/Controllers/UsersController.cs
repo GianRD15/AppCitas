@@ -2,6 +2,7 @@
 using AppCitas.Service.Entities;
 using AppCitas.Service.Entities.DOTs;
 using AppCitas.Service.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,31 +14,35 @@ namespace AppCitas.Service.Controllers;
 public class UsersController : BaseApiController
 {
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public UsersController(IUserRepository userRepository)
+    public UsersController(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository= userRepository;
+        _mapper= mapper;
     }
     // GET api/users
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
     {
-        return Ok(await _userRepository.GetUserAsync());
+        var users = await _userRepository.GetUserAsync();
+        var usersToReturn = _mapper.Map<IEnumerable<MemberDTO>>(users);
+
+        return Ok(usersToReturn);
     }
 
     // GET api/users/{id}
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<AppUser>> GetUserById(int id)
-    {
-        return await _userRepository.GetUserByIdAsync(id);
-    }
+    //[HttpGet("{id}")]
+    //public async Task<ActionResult<AppUser>> GetUserById(int id)
+    //{
+    //    return await _userRepository.GetUserByIdAsync(id);
+    //}
 
-    [HttpGet("username/{id}")]
-    public async Task<ActionResult<AppUser>> GetUserByUsername(string username)
+    [HttpGet("{username}")]
+    public async Task<ActionResult<MemberDTO>> GetUserByUsername(string username)
     {
-        Console.WriteLine(username);
-        return await _userRepository.GetUserByUsernameAsync(username);
+        return await _userRepository.GetMemberAsync(username);
     }
 
 }
