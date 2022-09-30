@@ -2,7 +2,7 @@
   {
     "UserName": "Lisa",
     "Gender": "female",
-    "DateOfBirth": "1983-11-29",
+    "Birthday": "1983-11-29",
     "KnownAs": "Doris",
     "Created": "2020-03-14",
     "LastActive": "2020-05-31",
@@ -21,7 +21,7 @@
   {
     "UserName": "Valerie",
     "Gender": "female",
-    "DateOfBirth": "1951-11-06",
+    "Birthday": "1951-11-06",
     "KnownAs": "Valerie",
     "Created": "2019-12-20",
     "LastActive": "2020-06-07",
@@ -40,7 +40,7 @@
   {
     "UserName": "Lena",
     "Gender": "female",
-    "DateOfBirth": "1960-10-12",
+    "Birthday": "1960-10-12",
     "KnownAs": "Lena",
     "Created": "2019-08-11",
     "LastActive": "2020-05-07",
@@ -59,7 +59,7 @@
   {
     "UserName": "Eula",
     "Gender": "female",
-    "DateOfBirth": "1979-05-28",
+    "Birthday": "1979-05-28",
     "KnownAs": "Eula",
     "Created": "2019-03-16",
     "LastActive": "2020-05-27",
@@ -78,7 +78,7 @@
   {
     "UserName": "Melva",
     "Gender": "female",
-    "DateOfBirth": "1994-01-21",
+    "Birthday": "1994-01-21",
     "KnownAs": "Melva",
     "Created": "2019-03-21",
     "LastActive": "2020-05-10",
@@ -97,7 +97,7 @@
   {
     "UserName": "Chandler",
     "Gender": "female",
-    "DateOfBirth": "1975-01-26",
+    "Birthday": "1975-01-26",
     "KnownAs": "Chandler",
     "Created": "2020-06-09",
     "LastActive": "2020-05-12",
@@ -116,7 +116,7 @@
   {
     "UserName": "Mckay",
     "Gender": "female",
-    "DateOfBirth": "1989-12-29",
+    "Birthday": "1989-12-29",
     "KnownAs": "Mckay",
     "Created": "2020-03-02",
     "LastActive": "2020-06-05",
@@ -135,7 +135,7 @@
   {
     "UserName": "Rasmussen",
     "Gender": "female",
-    "DateOfBirth": "1950-11-11",
+    "Birthday": "1950-11-11",
     "KnownAs": "Rasmussen",
     "Created": "2020-01-21",
     "LastActive": "2020-06-05",
@@ -154,7 +154,7 @@
   {
     "UserName": "Rosales",
     "Gender": "female",
-    "DateOfBirth": "1961-11-17",
+    "Birthday": "1961-11-17",
     "KnownAs": "Rosales",
     "Created": "2019-03-10",
     "LastActive": "2020-05-01",
@@ -173,7 +173,7 @@
   {
     "UserName": "Todd",
     "Gender": "female",
-    "DateOfBirth": "1976-11-28",
+    "Birthday": "1976-11-28",
     "KnownAs": "Adkins",
     "Created": "2019-04-02",
     "LastActive": "2020-06-07",
