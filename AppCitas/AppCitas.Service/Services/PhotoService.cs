@@ -1,10 +1,11 @@
 ﻿using AppCitas.Service.Helpers;
+using AppCitas.Service.Interfaces;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
 
-namespace AppCitas.Service.Interfaces;
+namespace AppCitas.Service.Services;
 
 public class PhotoService : IPhotoService
 {
@@ -24,13 +25,13 @@ public class PhotoService : IPhotoService
     public async Task<ImageUploadResult> AddPhotoAsync(IFormFile photofile)
     {
         var uploadResult = new ImageUploadResult();
-        if(photofile.Length > 0)
+        if (photofile.Length > 0)
         {
             using var stream = photofile.OpenReadStream();
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(photofile.FileName, stream),
-                Transformation=new Transformation().Height(500).Width(500).Crop("Fill").Gravity("Face")
+                Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
             };
             uploadResult = await _cloudinary.UploadAsync(uploadParams);
         }
