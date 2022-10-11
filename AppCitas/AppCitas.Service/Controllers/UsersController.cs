@@ -42,7 +42,7 @@ public class UsersController : BaseApiController
     //    return await _userRepository.GetUserByIdAsync(id);
     //}
 
-    [HttpGet("{username}")]
+    [HttpGet("{username}", Name = "GetUser")]
     public async Task<ActionResult<MemberDTO>> GetUserByUsername(string username)
     {
         return await _userRepository.GetMemberAsync(username);
@@ -54,7 +54,7 @@ public class UsersController : BaseApiController
         var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
-        _mapper.Map(member,user);
+        _mapper.Map(member, user);
 
         _userRepository.Update(user);
 
@@ -82,7 +82,11 @@ public class UsersController : BaseApiController
 
         user.Photos.Add(photo);
 
-        if (await _userRepository.SaveAllAsync()) return _mapper.Map<PhotoDTO>(photo);
+        if (await _userRepository.SaveAllAsync())
+        {
+            //return _mapper.Map<PhotoDTO>(photo);
+            return CreatedAtRoute("GetUser", new {username = user.UserName }, _mapper.Map<PhotoDTO>(photo));
+        }
 
         return BadRequest("Problem adding photo");
 
