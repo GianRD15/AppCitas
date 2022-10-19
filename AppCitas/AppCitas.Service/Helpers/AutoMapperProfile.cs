@@ -2,6 +2,7 @@
 using AppCitas.Service.Entities.DOTs;
 using AppCitas.Service.Extensions;
 using AutoMapper;
+using AppCitas.Service.DTOs;
 
 namespace AppCitas.Service.Helpers;
 
@@ -19,5 +20,7 @@ public class AutoMapperProfiles : Profile
 
 		CreateMap<Photo, PhotoDTO>();
 		CreateMap<MemberUpdateDTO, AppUser>();
-	}
+
+        CreateMap<RegisterDto, AppUser>();
+    }
 }
