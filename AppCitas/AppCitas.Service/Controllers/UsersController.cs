@@ -2,6 +2,7 @@
 using AppCitas.Service.Entities;
 using AppCitas.Service.Entities.DOTs;
 using AppCitas.Service.Extensions;
+using AppCitas.Service.Helpers;
 using AppCitas.Service.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -27,9 +28,15 @@ public class UsersController : BaseApiController
     }
     // GET api/users
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
-    {
-        var users = await _userRepository.GetMembersAsync();
+   public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers([FromQuery] UserParams userParams)
+    { 
+        var users = await _userRepository.GetMembersAsync(userParams);
+
+        Response.AddPaginationHeader(
+            users.CurrentPage,
+            users.PageSize,
+            users.TotalCount,
+            users.TotalPages);
 
         return Ok(users);
     }
