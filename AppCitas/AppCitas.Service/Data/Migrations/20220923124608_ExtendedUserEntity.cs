@@ -54,7 +54,7 @@ namespace AppCitas.Service.Data.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "Knowas",
+                name: "KnownAs",
                 table: "Users",
                 type: "TEXT",
                 nullable: true);
@@ -134,7 +134,7 @@ namespace AppCitas.Service.Data.Migrations
                 table: "Users");
 
             migrationBuilder.DropColumn(
-                name: "Knowas",
+                name: "KnownAs",
                 table: "Users");
 
             migrationBuilder.DropColumn(
