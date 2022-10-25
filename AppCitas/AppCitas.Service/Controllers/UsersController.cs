@@ -34,7 +34,7 @@ public class UsersController : BaseApiController
         userParams.CurrentUsername = user.UserName;
 
         if (string.IsNullOrEmpty(userParams.Gender))
-            userParams.Gender = user.Gender == "male" ? "female" : "male";
+            userParams.Gender = user.Gender == "female" ? "male" : "female";
 
         var users = await _userRepository.GetMembersAsync(userParams);
 
