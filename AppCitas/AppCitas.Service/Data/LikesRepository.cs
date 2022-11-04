@@ -31,12 +31,12 @@ public class LikesRepository : ILikesRepository
         if(predicate.ToLower().Equals("liked"))
         {
             likes = likes.Where(like => like.SourceUserId == userId);
-            users = likes.Select(like => like.SourceUser);
+            users = likes.Select(like => like.LikedUser);
         }
         if(predicate.ToLower().Equals("likedby"))
         {
             likes = likes.Where(like => like.LikedUserId == userId);
-            users = likes.Select(like => like.LikedUser);
+            users = likes.Select(like => like.SourceUser);
         }
 
         return await users.Select(user => new LikeDto
