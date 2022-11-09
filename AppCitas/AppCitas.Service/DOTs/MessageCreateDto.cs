@@ -2,6 +2,6 @@
 
 public class MessageCreateDto
 {
-    public string RecipientUSername { get; set; }
+    public string RecipientUsername { get; set; }
     public string Content { get; set; }
 }

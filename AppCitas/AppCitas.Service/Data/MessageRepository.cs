@@ -16,17 +16,17 @@ public class MessageRepository : IMessageRepository
 
     public void AddMessage(Message message)
     {
-        _context.Messages.Add(message);
+        _context.Message.Add(message);
     }
 
     public void DeleteMessage(Message message)
     {
-        _context.Messages.Remove(message);
+        _context.Message.Remove(message);
     }
 
     public async Task<Message> GetMessage(int id)
     {
-        return await _context.Messages.FindAsync(id);
+        return await _context.Message.FindAsync(id);
     }
 
     public Task<PagedList<MessageDto>> GetMessagesForUser()
