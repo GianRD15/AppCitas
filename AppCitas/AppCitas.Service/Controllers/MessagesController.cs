@@ -2,11 +2,14 @@
 using AppCitas.Service.DTOs;
 using AppCitas.Service.Entities;
 using AppCitas.Service.Extensions;
+using AppCitas.Service.Helpers;
 using AppCitas.Service.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Threading.Tasks.Dataflow;
 
 namespace AppCitas.Service.Controllers;
 
@@ -41,7 +44,7 @@ public class MessagesController : BaseApiController
         {
             Sender = sender,
             Recipient = recipient,
-            SenderUserName = sender.UserName,
+            SenderUsername = sender.UserName,
             RecipientUsername = recipient.UserName,
             Content = messageCreateDto.Content
         };
@@ -51,5 +54,16 @@ public class MessagesController : BaseApiController
             return Ok(_mapper.Map<MessageDto>(message));
 
         return BadRequest("Failed to send the message");
+    }
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser([FromQuery] MessageParams messageParams)
+    {
+        messageParams.Username = User.GetUsername();
+
+        var messages = await _messageRepository.GetMessagesForUser(messageParams);
+
+        Response.AddPaginationHeader(messages.CurrentPage, messages.PageSize, messages.TotalCount, messages.TotalPages);
+
+        return messages;
     }
 }
