@@ -31,7 +31,10 @@ public class MessageRepository : IMessageRepository
 
     public async Task<Message> GetMessage(int id)
     {
-        return await _context.Message.FindAsync(id);
+        return await _context.Message
+            .Include(u => u.Sender)
+            .Include(u => u.Recipient)
+            .SingleOrDefaultAsync(x => x.Id== id);
     }
 
     public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
@@ -39,9 +42,11 @@ public class MessageRepository : IMessageRepository
         var query = _context.Message.OrderByDescending(n => n.DateSent).AsQueryable();
         query = messageParams.Container.ToLower() switch
         {
-            "inbox" => query.Where(u => u.Recipient.UserName.Equals(messageParams.Username)),
-            "outbox" => query.Where(u => u.Sender.UserName.Equals(messageParams.Username)),
-            _ => query.Where(u => u.Recipient.UserName.Equals(messageParams.Username) && u.DateRead == null)
+            "inbox" => query.Where(u => u.Recipient.UserName.Equals(messageParams.Username) && u.RecipientDeleted ==false),
+            "outbox" => query.Where(u => u.Sender.UserName.Equals(messageParams.Username) && u.SenderDeleted == false),
+            _ => query.Where(u => u.Recipient.UserName.Equals(messageParams.Username) 
+                && u.RecipientDeleted== false 
+                && u.DateRead == null)
         };
 
         var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
@@ -55,9 +60,12 @@ public class MessageRepository : IMessageRepository
             .Include(u => u.Sender). ThenInclude(p => p.Photos)
             .Include(u => u.Recipient).ThenInclude(p => p.Photos)
             .Where(m => m.Recipient.UserName.Equals(currentUsername)
+                    && m.RecipientDeleted == false
                     && m.SenderUsername.Equals(recipientUsername)
                     || m.Recipient.UserName.Equals(recipientUsername)
-                    && m.SenderUsername.Equals(currentUsername))
+                    && m.SenderUsername.Equals(currentUsername)
+                    && m.SenderDeleted==false)
+            .OrderBy(m => m.DateSent)
             .ToListAsync();
         
         var unreadMessgaes = messages
@@ -69,7 +77,7 @@ public class MessageRepository : IMessageRepository
             foreach(var message in unreadMessgaes)
             {
                 message.DateRead = DateTime.Now;
-            }
+            }s
             await _context.SaveChangesAsync();
         }
 
