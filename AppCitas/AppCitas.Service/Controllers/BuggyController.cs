@@ -21,7 +21,7 @@ public class BuggyController: BaseApiController
         return "Secret Text";
     }
 
-    [HttpGet("not_found")]
+    [HttpGet("not-found")]
     public ActionResult<AppUser> GetNotFound()
     {
         var thing = _context.Users.Find(-1);
@@ -29,7 +29,7 @@ public class BuggyController: BaseApiController
         return Ok(thing);
     }
 
-    [HttpGet("server_error")]
+    [HttpGet("server-error")]
     public ActionResult<string> GetServerError()
     {
         var thing = _context.Users.Find(-1);
@@ -38,7 +38,7 @@ public class BuggyController: BaseApiController
         return thingToReturn;
     }
 
-    [HttpGet("bad_request")]
+    [HttpGet("bad-request")]
     public ActionResult<string> GetBadRequest()
     {
         return BadRequest("This not a good request");
