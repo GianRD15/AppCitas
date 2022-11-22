@@ -1,13 +1,13 @@
 ﻿using AppCitas.Service.DTOs;
 using AppCitas.Service.Entities.DOTs;
-using AppCitas.UnitTests.Helpers;
+using AppCitas.test.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace AppCitas.UnitTests.Test
+namespace AppCitas.test.Test
 {
     public class BuggyControllerTests
     {
@@ -24,43 +24,10 @@ namespace AppCitas.UnitTests.Test
         }
 
         [Theory]
-        [InlineData("OK", "lisa", "Password")]
-        public async Task GetSecret_ShouldOK(string statusCode, string username, string password)
-        {
-            // Arrange
-            requestUrl = "api/account/login";
-            var loginDto = new LoginDTo
-            {
-                Username = username,
-                Password = password
-            };
-
-            loginObjetct = GetLoginObject(loginDto);
-            httpContent = GetHttpContent(loginObjetct);
-
-            httpResponse = await _client.PostAsync(requestUrl, httpContent);
-            var reponse = await httpResponse.Content.ReadAsStringAsync();
-            var userDto = JsonSerializer.Deserialize<UserDto>(reponse, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userDto?.Token);
-
-            requestUrl = "api/users";
-
-            // Act
-            httpResponse = await _client.GetAsync(requestUrl);
-
-            // Assert
-            Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
-            Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
-        }
-
-        [Theory]
         [InlineData("not-found", "NotFound")]
         [InlineData("server-error", "InternalServerError")]
         [InlineData("bad-request", "BadRequest")]
+        [InlineData("auth", "Unauthorized")]
         public async Task GetEndpoints_ShouldValidate(string endpoint, string statusCode)
         {
             // Arrange
@@ -110,6 +77,40 @@ namespace AppCitas.UnitTests.Test
         {
             // Arrange
             requestUrl = $"{apiRoute}/bad-request";
+
+            // Act
+            httpResponse = await _client.GetAsync(requestUrl);
+
+            // Assert
+            Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
+            Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
+        }
+
+        [Theory]
+        [InlineData("OK", "lisa", "Password")]
+        public async Task GetSecret_ShouldOK(string statusCode, string username, string password)
+        {
+            // Arrange
+            requestUrl = "api/account/login";
+            var loginDto = new LoginDTo
+            {
+                Username = username,
+                Password = password
+            };
+
+            loginObjetct = GetLoginObject(loginDto);
+            httpContent = GetHttpContent(loginObjetct);
+
+            httpResponse = await _client.PostAsync(requestUrl, httpContent);
+            var reponse = await httpResponse.Content.ReadAsStringAsync();
+            var userDto = JsonSerializer.Deserialize<UserDto>(reponse, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userDto?.Token);
+
+            requestUrl = "api/buggy/auth";
 
             // Act
             httpResponse = await _client.GetAsync(requestUrl);

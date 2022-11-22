@@ -1,4 +1,4 @@
-namespace AppCitas.UnitTests
+namespace AppCitas.test
 {
     public class UnitTest1
     {

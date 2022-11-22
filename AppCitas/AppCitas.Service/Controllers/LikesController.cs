@@ -44,8 +44,7 @@ public class LikesController : BaseApiController
 		sourceUser.LikedUsers.Add(userlike);
 
 		if(await _userRepository.SaveAllAsync()) return Ok();
-
-		return BadRequest("Failed to like user");
+		else return BadRequest("Failed to like user");
 	}
 
 	[HttpGet]

@@ -1,15 +1,9 @@
 ﻿using AppCitas.Service.Entities.DOTs;
-using AppCitas.UnitTests.Helpers;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace DatingAppUaa.UnitTests.Helpers
+namespace AppCitas.test.Helpers
 {
     public class LoginHelper
     {

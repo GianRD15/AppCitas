@@ -1,11 +1,11 @@
 ﻿using AppCitas.Service.DTOs;
 using AppCitas.Service.Entities.DOTs;
-using AppCitas.UnitTests.Helpers;
+using AppCitas.test.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Text;
 
-namespace AppCitas.UnitTests.Test
+namespace AppCitas.test.Test
 {
     public class AccountControllerTests
     {

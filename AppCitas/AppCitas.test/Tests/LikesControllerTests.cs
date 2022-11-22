@@ -1,14 +1,13 @@
 ﻿using AppCitas.Service.DTOs;
 using AppCitas.Service.Entities.DOTs;
-using AppCitas.UnitTests.Helpers;
-using DatingAppUaa.UnitTests.Helpers;
+using AppCitas.test.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Net;
 
 
-namespace AppCitas.UnitTests.Test
+namespace AppCitas.test.Test
 {
     public class LikesControllerTests
     {
@@ -93,6 +92,7 @@ namespace AppCitas.UnitTests.Test
 
             // Act
             httpResponse = await _client.PostAsync(requestUri, httpContent);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
             httpResponse = await _client.PostAsync(requestUri, httpContent);
 
             _client.DefaultRequestHeaders.Authorization = null;
@@ -102,8 +102,9 @@ namespace AppCitas.UnitTests.Test
         }
 
         [Theory]
-        [InlineData("OK", "lisa", "Password","todd")]
-        public async Task GetUserLikes_OK(string statusCode, string username, string password, string userliked)
+        [InlineData("OK", "lisa", "Password", "todd", "liked")]
+        [InlineData("OK", "lisa", "Password", "todd", "likedby")]
+        public async Task GetUserLikes_OK(string statusCode, string username, string password, string userliked, string predicate)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -117,7 +118,7 @@ namespace AppCitas.UnitTests.Test
             var userLiked = await LoginHelper.LoginUser(userliked, password);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userLiked.Token);
 
-            requestUri = $"{apiRoute}" + "?predicate=likedBy";
+            requestUri = $"{apiRoute}" + "?predicate="+predicate;
 
             // Act
             httpResponse = await _client.GetAsync(requestUri);

@@ -47,14 +47,6 @@ public class UsersController : BaseApiController
         return Ok(users);
     }
 
-    // GET api/users/{id}
-
-    //[HttpGet("{id}")]
-    //public async Task<ActionResult<AppUser>> GetUserById(int id)
-    //{
-    //    return await _userRepository.GetUserByIdAsync(id);
-    //}
-
     [HttpGet("{username}", Name = "GetUser")]
     public async Task<ActionResult<MemberDTO>> GetUserByUsername(string username)
     {

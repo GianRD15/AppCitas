@@ -53,13 +53,6 @@ public class UserRepository : IUserRepository
                 userParams.PageSize);
     }
 
-    public async Task<IEnumerable<AppUser>> GetUserAsync()
-    {
-        return await _context.Users
-            .Include(p => p.Photos)
-            .ToListAsync();
-    }
-
     public async Task<AppUser> GetUserByIdAsync(int id)
     {
         return await _context.Users.FindAsync(id);

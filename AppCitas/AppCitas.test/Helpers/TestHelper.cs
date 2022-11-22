@@ -2,7 +2,7 @@
 using System;
 using System.Net.Http;
 
-namespace AppCitas.UnitTests.Helpers
+namespace AppCitas.test.Helpers
 {
     public sealed class TestHelper
     {

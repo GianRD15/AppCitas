@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace AppCitas.UnitTests
+namespace AppCitas.test
 {
     public class APIWebApplicationFactory<IStartup> : WebApplicationFactory<Startup>
     {

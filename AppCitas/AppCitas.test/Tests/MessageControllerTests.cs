@@ -1,12 +1,11 @@
 ﻿using AppCitas.Service.DTOs;
-using AppCitas.UnitTests.Helpers;
-using DatingAppUaa.UnitTests.Helpers;
+using AppCitas.test.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace AppCitas.UnitTests.Test
+namespace AppCitas.test.Test
 {
 
     public class MessagesControllerTests
@@ -24,7 +23,7 @@ namespace AppCitas.UnitTests.Test
         }
 
         [Theory]
-        [InlineData("BadRequest", "lisa", "Password", "lisa", "Hola")]
+        [InlineData("BadRequest", "lisa", "Password", "lisa", "Hola guapa")]
         public async Task CreateMessage_BadRequest(string statusCode, string username, string password, string recipientUsername, string content)
         {
             // Arrange
@@ -48,8 +47,9 @@ namespace AppCitas.UnitTests.Test
             Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
             Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
         }
+
         [Theory]
-        [InlineData("NotFound", "lisa", "Password", "pedritosola", "Hola")]
+        [InlineData("NotFound", "lisa", "Password", "pedritosola", "Hola guapo")]
         public async Task CreateMessage_NotFound(string statusCode, string username, string password, string recipientUsername, string content)
         {
             // Arrange
@@ -74,6 +74,7 @@ namespace AppCitas.UnitTests.Test
             Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
             Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
         }
+        
         [Theory]
         [InlineData("OK", "lisa", "Password", "todd", "Hola Guapo")]
         public async Task CreateMessage_OK(string statusCode, string username, string password, string recipientUsername, string content)
@@ -100,8 +101,8 @@ namespace AppCitas.UnitTests.Test
         }
 
         [Theory]
-        [InlineData("OK", "todd", "Password", "ruthie", "Hola")]
-        public async Task GetMessagesForUser_OK(string statusCode, string username, string password, string recipientUsername, string content)
+        [InlineData("OK", "todd", "Password")]
+        public async Task GetMessagesForUser_OK(string statusCode, string username, string password)
         {
             // Arrange
             var user = await LoginHelper.LoginUser(username, password);
@@ -120,6 +121,7 @@ namespace AppCitas.UnitTests.Test
 
         [Theory]
         [InlineData("OK", "lisa", "Password", "Outbox")]
+        [InlineData("OK", "lisa", "Password", "inbox")]
         public async Task GetMessagesForUserFromQuery_OK(string statusCode, string username, string password, string container)
         {
             // Arrange
@@ -156,6 +158,24 @@ namespace AppCitas.UnitTests.Test
             Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
         }
 
+        [Theory]
+        [InlineData("Unauthorized", "lisa", "Passwords", "todd")]
+        public async Task GetMessagesThread_Unauth(string statusCode, string username, string password, string user2)
+        {
+            // Arrange
+            var user = await LoginHelper.LoginUser(username, password);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
+
+            requestUri = $"{apiRoute}/thread/" + user2;
+
+            // Act
+            httpResponse = await _client.GetAsync(requestUri);
+            _client.DefaultRequestHeaders.Authorization = null;
+
+            // Assert
+            Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
+            Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
+        }
 
         [Theory]
         [InlineData("OK", "lisa", "Password", "todd", "Hola Guapo")]

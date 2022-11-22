@@ -25,17 +25,17 @@ public class BuggyController: BaseApiController
     public ActionResult<AppUser> GetNotFound()
     {
         var thing = _context.Users.Find(-1);
-        if (thing == null) return NotFound();
-        return Ok(thing);
+        return NotFound();
+        
     }
 
     [HttpGet("server-error")]
     public ActionResult<string> GetServerError()
     {
         var thing = _context.Users.Find(-1);
-        var thingToReturn = thing.ToString();
+        var thing2="";
+        return thing2 = thing.ToString();
 
-        return thingToReturn;
     }
 
     [HttpGet("bad-request")]

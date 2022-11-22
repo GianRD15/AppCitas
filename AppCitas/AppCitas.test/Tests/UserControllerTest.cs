@@ -1,13 +1,12 @@
 ﻿using AppCitas.Service.Entities.DOTs;
-using AppCitas.UnitTests.Helpers;
-using DatingAppUaa.UnitTests.Helpers;
+using AppCitas.test.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using Windows.Storage;
 
-namespace AppCitas.UnitTests.Test
+namespace AppCitas.test.Test
 {
     public class UsersControllerTests
     {
@@ -98,7 +97,7 @@ namespace AppCitas.UnitTests.Test
 
             var user = await LoginHelper.LoginUser(username, password);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
-            requestUri = $"{apiRoute}" + "?pageNumber=" + pageSize + "&pageSize" + pageNumber;
+            requestUri = $"{apiRoute}" + "?pageNumber=" + pageSize + "&pageSize=" + pageNumber;
 
             // Act
             httpResponse = await _client.GetAsync(requestUri);
@@ -106,6 +105,25 @@ namespace AppCitas.UnitTests.Test
             Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
             Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
         }
+
+        [Theory]
+        [InlineData("OK", "lisa", "Password", 18, 100)]
+        public async Task GetUsersWithAge_OK(string statusCode, string username, string password, int minAge, int maxAge)
+        {
+            // Arrange
+            _client.DefaultRequestHeaders.Authorization = null;
+
+            var user = await LoginHelper.LoginUser(username, password);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
+            requestUri = $"{apiRoute}" + "?MinAge=" + minAge + "&MaxAge=" + maxAge;
+
+            // Act
+            httpResponse = await _client.GetAsync(requestUri);
+            // Assert
+            Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
+            Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
+        }
+
 
         [Theory]
         [InlineData("OK", "lisa", "Password")]
@@ -202,7 +220,7 @@ namespace AppCitas.UnitTests.Test
 
             MultipartFormDataContent form = new MultipartFormDataContent();
             HttpContent content = new StringContent(file);
-            form.Add(content, file); 
+            form.Add(content, file);
             string root = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
             root = root.Substring(0, root.Length - 17);
             string path = root + @"\Tests";
@@ -226,7 +244,7 @@ namespace AppCitas.UnitTests.Test
             var id = message[0].Split("\"")[2].Split(":")[1];
 
             requestUri = $"{apiRoute}" + "/set-main-photo/" + id;
-
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
             // Act
             httpResponse = await _client.PutAsync(requestUri, null);
 
