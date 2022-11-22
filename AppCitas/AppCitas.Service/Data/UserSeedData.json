@@ -14,6 +14,10 @@
     "Photos": [
       {
         "url": "https://randomuser.me/api/portraits/women/2.jpg",
+        "isMain": false
+      },
+      {
+        "url": "https://randomuser.me/api/portraits/women/2.jpg",
         "isMain": true
       }
     ]
@@ -115,7 +119,7 @@
   },
   {
     "UserName": "Mckay",
-    "Gender": "female",
+    "Gender": "male",
     "Birthday": "1989-12-29",
     "KnownAs": "Mckay",
     "Created": "2020-03-02",
@@ -134,7 +138,7 @@
   },
   {
     "UserName": "Rasmussen",
-    "Gender": "female",
+    "Gender": "male",
     "Birthday": "1950-11-11",
     "KnownAs": "Rasmussen",
     "Created": "2020-01-21",

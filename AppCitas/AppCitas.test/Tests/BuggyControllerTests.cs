@@ -47,7 +47,7 @@ namespace AppCitas.UnitTests.Test
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userDto?.Token);
 
-            requestUrl = $"{apiRoute}/auth";
+            requestUrl = "api/users";
 
             // Act
             httpResponse = await _client.GetAsync(requestUrl);

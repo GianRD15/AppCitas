@@ -2,12 +2,8 @@
 using AppCitas.Service.Entities.DOTs;
 using AppCitas.UnitTests.Helpers;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Net;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace AppCitas.UnitTests.Test
 {
@@ -15,12 +11,10 @@ namespace AppCitas.UnitTests.Test
     {
         private string apiRoute = "api/account";
         private readonly HttpClient _client;
-        private HttpResponseMessage? httpResponse;
-        private string requestUri = String.Empty;
-        private string registerObject = String.Empty;
-        private string loginObjetct = String.Empty;
-        private HttpContent? httpContent;
-
+        private HttpResponseMessage httpResponse;
+        private string requestUri;
+        private string registeredObject;
+        private HttpContent httpContent;
         public AccountControllerTests()
         {
             _client = TestHelper.Instance.Client;
@@ -28,7 +22,7 @@ namespace AppCitas.UnitTests.Test
 
         [Theory]
         [InlineData("BadRequest", "lisa", "KnownAs", "Gender", "2000-01-01", "City", "Country", "Password")]
-        public async Task Register_ShouldBadRequest(string statusCode, string username, string knownAs, string gender, DateTime dateOfBirth, string city, string country, string password)
+        public async Task Register_Fail(string statusCode, string username, string knownAs, string gender, DateTime birthday, string city, string country, string password)
         {
             // Arrange
             requestUri = $"{apiRoute}/register";
@@ -37,14 +31,42 @@ namespace AppCitas.UnitTests.Test
                 Username = username,
                 KnownAs = knownAs,
                 Gender = gender,
-                Birthday = dateOfBirth,
+                Birthday = birthday,
                 City = city,
                 Country = country,
                 Password = password
             };
+            registeredObject = GetRegisterObject(registerDto);
+            httpContent = GetHttpContent(registeredObject);
 
-            registerObject = GetRegisterObject(registerDto);
-            httpContent = GetHttpContent(registerObject);
+            // Act
+            httpResponse = await _client.PostAsync(requestUri, httpContent);
+
+            // Assert
+            Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
+            Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
+        }
+
+        //cambiar el nombre arturo
+
+        [Theory]
+        [InlineData("OK", "arturo", "KnownAs", "Gender", "2000-01-01", "City", "Country", "Password")]
+        public async Task Register_ReturnOk(string statusCode, string username, string knownAs, string gender, DateTime birthday, string city, string country, string password)
+        {
+            // Arrange
+            requestUri = $"{apiRoute}/register";
+            var registerDto = new RegisterDto
+            {
+                Username = username,
+                KnownAs = knownAs,
+                Gender = gender,
+                Birthday = birthday,
+                City = city,
+                Country = country,
+                Password = password
+            };
+            registeredObject = GetRegisterObject(registerDto);
+            httpContent = GetHttpContent(registeredObject);
 
             // Act
             httpResponse = await _client.PostAsync(requestUri, httpContent);
@@ -55,36 +77,8 @@ namespace AppCitas.UnitTests.Test
         }
 
         [Theory]
-        [InlineData("OK", "arturo", "Arturo", "male", "2000-01-01", "Aguascalientes", "Mexico", "Pa$$w0rd")]
-        public async Task Register_ShouldOk(string statusCode, string username, string knownAs, string gender, DateTime dateOfBirth, string city, string country, string password)
-        {
-            // Arrange
-            requestUri = $"{apiRoute}/register";
-            var registerDto = new RegisterDto
-            {
-                Username = username,
-                KnownAs = knownAs,
-                Gender = gender,
-                Birthday = dateOfBirth,
-                City = city,
-                Country = country,
-                Password = password
-            };
-
-            registerObject = GetRegisterObject(registerDto);
-            httpContent = GetHttpContent(registerObject);
-
-            // Act
-            httpResponse = await _client.PostAsync(requestUri, httpContent);
-
-            // Assert
-            Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
-            Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
-        }
-
-        [Theory]
-        [InlineData("Unauthorized", "lisa", "password")]
-        public async Task Login_ShouldUnauthorized(string statusCode, string username, string password)
+        [InlineData("Unauthorized", "lisa", "notapassword")]
+        public async Task Login_Fail(string statusCode, string username, string password)
         {
             // Arrange
             requestUri = $"{apiRoute}/login";
@@ -93,9 +87,8 @@ namespace AppCitas.UnitTests.Test
                 Username = username,
                 Password = password
             };
-
-            loginObjetct = GetRegisterObject(loginDto);
-            httpContent = GetHttpContent(loginObjetct);
+            registeredObject = GetRegisterObject(loginDto);
+            httpContent = GetHttpContent(registeredObject);
 
             // Act
             httpResponse = await _client.PostAsync(requestUri, httpContent);
@@ -107,7 +100,7 @@ namespace AppCitas.UnitTests.Test
 
         [Theory]
         [InlineData("OK", "lisa", "Password")]
-        public async Task Login_ShouldOK(string statusCode, string username, string password)
+        public async Task Login_ReturnOK(string statusCode, string username, string password)
         {
             // Arrange
             requestUri = $"{apiRoute}/login";
@@ -116,8 +109,8 @@ namespace AppCitas.UnitTests.Test
                 Username = username,
                 Password = password
             };
-            loginObjetct = GetRegisterObject(loginDto);
-            httpContent = GetHttpContent(loginObjetct);
+            registeredObject = GetRegisterObject(loginDto);
+            httpContent = GetHttpContent(registeredObject);
 
             // Act
             httpResponse = await _client.PostAsync(requestUri, httpContent);
@@ -128,7 +121,6 @@ namespace AppCitas.UnitTests.Test
         }
 
         #region Privated methods
-
         private static string GetRegisterObject(RegisterDto registerDto)
         {
             var entityObject = new JObject()
