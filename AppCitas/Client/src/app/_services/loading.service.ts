@@ -13,8 +13,8 @@ export class LoadingService {
     this.loadingRequestCount++;
     this.spinnerServie.show(undefined,{
       type: 'square-jelly-box',
-      bdColor: 'rgba(255,255,255,0)',
-      color: '#333333'
+      bdColor: 'rgba(0,0,0,0.3)',
+      color: '#EAEAEA'
     })
   }
 
