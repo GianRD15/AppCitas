@@ -5,3 +5,12 @@
 .nav-item, .nav-link {
     cursor: pointer;
 }
+
+img{
+    max-height: 50px;
+    max-width: 50px;
+    border: 1px solid white;
+}
+.profileImg{
+    border-radius: 150px;
+}
