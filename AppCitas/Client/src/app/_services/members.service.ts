@@ -6,6 +6,7 @@ import { map, Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class MembersService {
   baseURL = environment.baseUrl;
   members: Member[] =[];
@@ -35,5 +36,9 @@ export class MembersService {
         this.members[index] = {...this.members[index], ...member};
       })
     );
+  }
+
+  setMainPhoto(photoId: number){
+    return this.http.put(this.baseURL + 'users/set-main-photo/'+photoId,{});
   }
 }
