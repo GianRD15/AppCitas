@@ -2,14 +2,26 @@
     <h2 class="text-center text-primary">Registrate</h2>
  
     <div class="mb-3">
-        <input type="text" class="form-control" formControlName="username" placeholder="Username">
+        <input 
+        [class.is-invalid]="registerForm.get('username')?.errors && registerForm.get('username')?.touched"
+        type="text" class="form-control" formControlName="username" placeholder="Username">
+        <div class="invalid-feedback">Username is missing</div>
     </div>
     
     <div class="mb-3">
-        <input type="password" formControlName="password" class="form-control" placeholder="Password">
+        <input 
+        [class.is-invalid]="registerForm.get('password')?.errors && registerForm.get('password')?.touched"
+        type="password" formControlName="password" class="form-control" placeholder="Password">
+        <div class="invalid-feedback" *ngIf="registerForm.get('password')?.hasError('required')">The paswword is missing</div>
+        <div class="invalid-feedback" *ngIf="registerForm.get('password')?.hasError('minlength')">The paswword is to short</div>
+        <div class="invalid-feedback" *ngIf="registerForm.get('password')?.hasError('maxlength')">The paswword is to long</div>
     </div>
     <div class="mb-3">
-        <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password">
+        <input        
+        [class.is-invalid]="registerForm.get('confirmPassword')?.errors && registerForm.get('confirmPassword')?.touched" 
+        type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password">
+        <div class="invalid-feedback" *ngIf="registerForm.get('confirmPassword')?.hasError('required')">The paswword is missing</div>
+        <div class="invalid-feedback" *ngIf="registerForm.get('confirmPassword')?.hasError('notMatching')">The paswwords doesn't match</div>
     </div>
     <div class="text-center">
         <button class="btn btn-primary btn-info btn-lg me-2" type="submit">Register</button>
