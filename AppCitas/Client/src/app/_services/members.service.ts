@@ -11,10 +11,16 @@ import { UserParams } from '../_models/userParams';
 export class MembersService {
   baseURL = environment.baseUrl;
   members: Member[] = [];
+  memberCache = new Map();
 
   constructor(private http: HttpClient) {}
 
   getMembers(userParams: UserParams) {
+    const response = this.memberCache.get(Object.values(userParams).join('-'));
+
+    if (response) return of(response);
+
+    
     let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
     
     params = params.append('minAge',userParams.minAge);
@@ -22,7 +28,12 @@ export class MembersService {
     params = params.append('gender',userParams.gender);
     params = params.append('orderBy',userParams.orderBy);
 
-    return this.getPaginatedResult<Member[]>(this.baseURL+'users' ,params);
+    return this.getPaginatedResult<Member[]>(this.baseURL + 'users', params).pipe(
+      map(response => {
+        this.memberCache.set(Object.values(userParams).join('-'), response);
+        return response;
+      })
+    );
   }
 
   private getPaginatedResult<T>(url: string, params: HttpParams) {
@@ -53,7 +64,10 @@ export class MembersService {
   }
 
   getMember(username: String): Observable<Member> {
-    const member = this.members.find((x) => x.username === username);
+    const member = [...this.memberCache.values()]
+      .reduce((arr, elem) => arr.concat(elem.result),[])
+      .find((member: Member) => member.username === username);
+
     if (member) return of(member);
     return this.http.get<Member>(this.baseURL + 'users/' + username);
   }
