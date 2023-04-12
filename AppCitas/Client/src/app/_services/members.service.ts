@@ -122,6 +122,6 @@ export class MembersService {
   }
 
   getLikes(predicate:string){
-    return this.http.get(this.baseURL + "likes?=" + predicate);
+    return this.http.get<Member[]>(this.baseURL + "likes?predicate=" + predicate);
   }
 }
