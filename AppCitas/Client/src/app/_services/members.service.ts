@@ -116,4 +116,12 @@ export class MembersService {
   setMainPhoto(photoId: number) {
     return this.http.put(this.baseURL + 'users/set-main-photo/' + photoId, {});
   }
+
+  addlike(username: string){
+    return this.http.post(this.baseURL + "likes/" + username, {});
+  }
+
+  getLikes(predicate:string){
+    return this.http.get(this.baseURL + "likes?=" + predicate);
+  }
 }
